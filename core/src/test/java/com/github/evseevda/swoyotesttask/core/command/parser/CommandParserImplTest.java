@@ -4,19 +4,11 @@ import com.github.evseevda.swoyotesttask.core.command.Command;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 class CommandParserImplTest {
 
     private static final CommandParser PARSER = new CommandParserImpl();
-
-    static {
-        Map<String, String> args = new LinkedHashMap<>();
-        args.put("a", "bc de");
-        args.put("f", "gh ij");
-        args.put("k", "lm no");
-    }
 
     @Test
     void givenCommandAsStringWithoutArgs_WhenParserParseIsCalled_ThenReturnedCommandIsCorrect() {
