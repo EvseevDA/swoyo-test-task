@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.github.evseevda.swoyo-test-task</groupId>
     <artifactId>server</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.9</version>
     <name>server</name>
     <description>server</description>
     <url/>

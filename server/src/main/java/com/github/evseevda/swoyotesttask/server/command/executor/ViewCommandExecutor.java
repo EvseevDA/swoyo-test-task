@@ -25,9 +25,9 @@ public class ViewCommandExecutor implements ClientCommandExecutor {
             String topicName = command.getArgs().get("t");
             String voteName = command.getArgs().get("v");
             if (topicName != null && voteName != null) {
-                return voteOrNotFoundMessage(topicName, voteName);
+                return voteOrErrorStatus(topicName, voteName);
             } else if (topicName != null) {
-                return topicOrNotFoundMessage(topicName);
+                return topicOrErrorStatus(topicName);
             } else {
                 return topicRepository.getTopics().toString();
             }
@@ -37,7 +37,7 @@ public class ViewCommandExecutor implements ClientCommandExecutor {
     }
 
 
-    private String topicOrNotFoundMessage(String topicName) {
+    private String topicOrErrorStatus(String topicName) {
         Optional<Topic> topic = topicRepository.getTopics().getTopicByName(topicName);
         if (topic.isPresent()) {
             return topic.get().getVotes().toString();
@@ -46,7 +46,7 @@ public class ViewCommandExecutor implements ClientCommandExecutor {
         }
     }
 
-    private String voteOrNotFoundMessage(String topicName, String voteName) {
+    private String voteOrErrorStatus(String topicName, String voteName) {
         Optional<Vote> vote = topicRepository.getTopics().getVote(topicName, voteName);
         if (vote.isPresent()) {
             return vote.get().toString();

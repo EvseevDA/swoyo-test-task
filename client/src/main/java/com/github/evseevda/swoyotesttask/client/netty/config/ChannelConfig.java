@@ -28,7 +28,6 @@ public class ChannelConfig {
     @Value("${server.port}")
     private int port;
 
-
     @Bean
     public EventLoopGroup eventLoopGroup() {
         return new NioEventLoopGroup();
@@ -37,7 +36,6 @@ public class ChannelConfig {
     @Bean
     @Lazy
     public Bootstrap bootstrap(EventLoopGroup eventLoopGroup) {
-        System.out.println("CHANNEL INITIALIZING");
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(eventLoopGroup)
                 .channel(NioSocketChannel.class)

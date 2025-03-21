@@ -1,8 +1,8 @@
 package com.github.evseevda.swoyotesttask.client.netty.config;
 
+import com.github.evseevda.swoyotesttask.client.input.handler.ClientCommandHandler;
 import com.github.evseevda.swoyotesttask.client.netty.client.AsbtractNettyClient;
 import com.github.evseevda.swoyotesttask.client.netty.client.NettyClient;
-import com.github.evseevda.swoyotesttask.client.input.handler.ClientCommandHandler;
 import com.github.evseevda.swoyotesttask.core.ui.input.UserInputReader;
 import com.github.evseevda.swoyotesttask.core.ui.output.MessageWriter;
 import io.netty.bootstrap.Bootstrap;
@@ -34,7 +34,7 @@ public class NettyClientConfig {
             }
 
             @Override
-            public Channel configureChannel() throws InterruptedException {
+            public Channel configureChannel() {
                 return channel;
             }
 

@@ -10,6 +10,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
+@EqualsAndHashCode
 public class Command {
 
     private String command;

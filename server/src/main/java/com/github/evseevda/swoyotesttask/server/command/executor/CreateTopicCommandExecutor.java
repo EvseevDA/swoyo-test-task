@@ -22,10 +22,19 @@ public class CreateTopicCommandExecutor implements ClientCommandExecutor {
     @Override
     @AuthenticationRequired
     public String execute(Command command) {
+        Topic topic = createTopic(command);
+        return tryAddTopic(topic);
+    }
+
+    private Topic createTopic(Command command) {
         String topicName = command.getArgs().get("n");
         Topic topic = Topic.builder()
                 .name(topicName)
                 .build();
+        return topic;
+    }
+
+    private String tryAddTopic(Topic topic) {
         try {
             Topics topics = topicRepository.getTopics();
             topics.addTopic(topic);

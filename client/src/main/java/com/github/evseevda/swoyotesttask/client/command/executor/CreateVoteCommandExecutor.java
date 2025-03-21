@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -30,8 +29,7 @@ public class CreateVoteCommandExecutor extends ExceptionHandlingClientCommandExe
 
     @Override
     protected String logic(Command command) throws Exception {
-        Map<String, String> args = command.getArgs();
-        String topic = args.get("t");
+        String topic = command.getArgs().get("t");
         String requestBody = makeRequestBody(topic);
         makeRequestAndSend(requestBody);
         return "sent";

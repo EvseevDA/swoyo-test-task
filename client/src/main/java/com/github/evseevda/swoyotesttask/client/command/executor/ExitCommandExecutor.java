@@ -1,7 +1,6 @@
 package com.github.evseevda.swoyotesttask.client.command.executor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.evseevda.swoyotesttask.client.exception.ClientException;
 import com.github.evseevda.swoyotesttask.client.netty.config.ClientExecutionState;
 import com.github.evseevda.swoyotesttask.core.command.Command;
 import com.github.evseevda.swoyotesttask.core.command.executor.ClientCommandExecutor;
@@ -25,7 +24,7 @@ public class ExitCommandExecutor implements ClientCommandExecutor {
         try {
             makeAndSendExitRequest();
         } catch (Exception e) {
-            throw new ClientException("Client exception occurred.", e);
+            return CommandExecutionResult.ERROR.name();
         }
         return CommandExecutionResult.OK.name();
     }

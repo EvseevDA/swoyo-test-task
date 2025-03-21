@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.evseevda.swoyotesttask.core.command.executor.facade.ClientCommandExecutorFacade;
 import com.github.evseevda.swoyotesttask.core.messaging.request.RequestAction;
 import com.github.evseevda.swoyotesttask.core.messaging.request.ServerRequest;
-import com.github.evseevda.swoyotesttask.core.messaging.response.ResponseStatus;
 import com.github.evseevda.swoyotesttask.core.messaging.response.ServerResponse;
 import com.github.evseevda.swoyotesttask.server.exception.ServerException;
 import io.netty.channel.ChannelHandlerContext;
@@ -29,13 +28,13 @@ public class ExecuteCommandRequestHandler implements RequestHandler {
         try {
             String command = request.getBody();
             String commandOutput = clientCommandExecutorFacade.execute(command);
-            writeSuccessResponse(context, commandOutput);
+            writeCommandOutput(context, commandOutput);
         } catch (Throwable e) {
             handleError(context);
         }
     }
 
-    private void writeSuccessResponse(ChannelHandlerContext context, String commandOutput) throws JsonProcessingException {
+    private void writeCommandOutput(ChannelHandlerContext context, String commandOutput) throws JsonProcessingException {
         ServerResponse response = ServerResponse.ok(RequestAction.EXECUTE_COMMAND, commandOutput);
         String responseString = objectMapper.writeValueAsString(response);
         context.writeAndFlush(responseString);
