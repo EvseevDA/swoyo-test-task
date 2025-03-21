@@ -10,12 +10,14 @@ import com.github.evseevda.swoyotesttask.server.infrastructure.annotation.Authen
 import com.github.evseevda.swoyotesttask.server.repository.TopicRepository;
 import com.github.evseevda.swoyotesttask.server.security.context.SecurityContext;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class DeleteCommandExecutor implements CommandExecutor {
 
     private final TopicRepository topicRepository;
@@ -32,6 +34,7 @@ public class DeleteCommandExecutor implements CommandExecutor {
         if (vote.isPresent()) {
             if (vote.get().getOwner().equals(currentUser)) {
                 topics.deleteVote(topicName, voteName);
+                log.info("User '{}' deleted the vote '{}' from topic '{}'.", currentUser, voteName, topicName);
             } else {
                 return CommandExecutionResult.ERROR.name();
             }

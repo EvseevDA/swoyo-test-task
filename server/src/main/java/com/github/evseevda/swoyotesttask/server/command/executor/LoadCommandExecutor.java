@@ -6,6 +6,7 @@ import com.github.evseevda.swoyotesttask.core.command.executor.ServerCommandExec
 import com.github.evseevda.swoyotesttask.core.domain.topic.Topics;
 import com.github.evseevda.swoyotesttask.server.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -17,6 +18,7 @@ import static com.github.evseevda.swoyotesttask.core.command.executor.CommandExe
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class LoadCommandExecutor implements ServerCommandExecutor {
 
     private final TopicRepository topicRepository;
@@ -30,6 +32,7 @@ public class LoadCommandExecutor implements ServerCommandExecutor {
             String json = reader.readLine();
             if (!json.isEmpty()) {
                 topicRepository.setTopics(objectMapper.readValue(json, Topics.class));
+                log.info("Loaded topics from {}.", filePath);
             }
         } catch (Throwable e) {
             return ERROR.name();

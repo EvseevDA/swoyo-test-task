@@ -5,6 +5,7 @@ import com.github.evseevda.swoyotesttask.core.command.Command;
 import com.github.evseevda.swoyotesttask.core.command.executor.ServerCommandExecutor;
 import com.github.evseevda.swoyotesttask.server.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedWriter;
@@ -16,6 +17,7 @@ import static com.github.evseevda.swoyotesttask.core.command.executor.CommandExe
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SaveCommandExecutor implements ServerCommandExecutor {
 
     private final TopicRepository topicRepository;
@@ -27,7 +29,9 @@ public class SaveCommandExecutor implements ServerCommandExecutor {
         Path filePath = Path.of(filename);
         try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
             writer.write(objectMapper.writeValueAsString(topicRepository.getTopics()));
+            log.info("Saved topics to {}.", filePath);
         } catch (Throwable e) {
+            log.error("Error while saving topics.", e);
             return ERROR.name();
         }
         return OK.name();

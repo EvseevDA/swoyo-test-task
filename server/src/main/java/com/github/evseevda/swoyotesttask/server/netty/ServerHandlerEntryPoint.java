@@ -1,12 +1,9 @@
 package com.github.evseevda.swoyotesttask.server.netty;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.evseevda.swoyotesttask.core.messaging.request.RequestAction;
 import com.github.evseevda.swoyotesttask.core.messaging.request.ServerRequest;
-import com.github.evseevda.swoyotesttask.core.messaging.response.ResponseStatus;
 import com.github.evseevda.swoyotesttask.core.messaging.response.ServerResponse;
-import com.github.evseevda.swoyotesttask.server.exception.UserNotAuthenticatedException;
 import com.github.evseevda.swoyotesttask.server.netty.handler.RequestHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -23,24 +20,28 @@ public class ServerHandlerEntryPoint extends SimpleChannelInboundHandler<String>
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        String clientAddress = ctx.channel().remoteAddress().toString();
+        log.info("Channel opened: {}. Client: {}.", ctx.channel().id(), clientAddress);
+        super.channelActive(ctx);
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        String clientAddress = ctx.channel().remoteAddress().toString();
+        log.info("Channel closed: {}. Client: {}.", ctx.channel().id(), clientAddress);
+        super.channelInactive(ctx);
+    }
+
+    @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
         ServerRequest request = objectMapper.readValue(s, ServerRequest.class);
         RequestAction requestAction = request.getAction();
         try {
             requestHandlerMap.get(requestAction).handle(request, channelHandlerContext);
-        } catch (UserNotAuthenticatedException e) {
-            sendUnauthorizedResponse(channelHandlerContext);
         } catch (Throwable e) {
             channelHandlerContext.writeAndFlush(objectMapper.writeValueAsString(ServerResponse.error(requestAction, "Some error occurred.")));
         }
-    }
-
-    private void sendUnauthorizedResponse(ChannelHandlerContext channelHandlerContext) throws JsonProcessingException {
-        ServerResponse response = ServerResponse.builder()
-                .status(ResponseStatus.UNAUTHORIZED)
-                .build();
-        String responseString = objectMapper.writeValueAsString(response);
-        channelHandlerContext.writeAndFlush(responseString);
     }
 
     @Override
